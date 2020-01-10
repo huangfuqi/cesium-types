@@ -3077,8 +3077,31 @@ declare namespace Cesium {
     ): Cartesian2
   }
 
+  interface BillboardGraphicsOptions {
+    show?: boolean | Property
+    image?: string | Property
+    scale?: number | Property
+    pixelOffset?: Cartesian2 | Property
+    eyeOffset?: Cartesian3 | Property
+    horizontalOrigin?: HorizontalOrigin | Property
+    verticalOrigin?: VerticalOrigin | Property
+    heightReference?: HeightReference | Property
+    color?: Color | Property
+    ratation?: number | Property
+    alignedAxis?: Cartesian3 | Property
+    sizeInMeters?: boolean | Property
+    width?: number | Property
+    height?: number | Property
+    scaleByDistance?: NearFarScalar | Property
+    translucencyByDistance?: NearFarScalar | Property
+    pixelOffsetScaleByDistance?: NearFarScalar | Property
+    imageSubRegion?: BoundingRectangle | Property
+    distanceDisplayCondition?: number | Property
+    disableDepthTestDistance?: number | Property
+  }
+
   class BillboardGraphics {
-    definitionChanged: Event
+    readonly definitionChanged: Event
     image: Property
     imageSubRegion: Property
     scale: Property
@@ -3095,24 +3118,7 @@ declare namespace Cesium {
     scaleByDistance: Property
     translucencyByDistance: Property
     pixelOffsetScaleByDistance: Property
-    constructor(options?: {
-      image?: Property
-      show?: Property
-      scale?: Property
-      horizontalOrigin?: Property
-      verticalOrigin?: Property
-      eyeOffset?: Property
-      pixelOffset?: Property
-      rotation?: Property
-      alignedAxis?: Property
-      width?: Property
-      height?: Property
-      color?: Property
-      scaleByDistance?: Property
-      translucencyByDistance?: Property
-      pixelOffsetScaleByDistance?: Property
-      imageSubRegion?: Property
-    })
+    constructor(options?: BillboardGraphicsOptions)
     clone(result?: BillboardGraphics): BillboardGraphics
     merge(source: BillboardGraphics): BillboardGraphics
   }
@@ -3548,7 +3554,7 @@ declare namespace Cesium {
     orientation?: Property
     viewFrom?: Property
     parent?: Entity
-    billboard?: BillboardGraphics
+    billboard?: BillboardGraphics | BillboardGraphicsOptions
     box?: BoxGraphics | BoxGraphicsOptions
     corridor?: CorridorGraphics
     cylinder?: CylinderGraphics | CylinderGraphicsOptions
@@ -4385,25 +4391,26 @@ declare namespace Cesium {
     getRenderState(): any
   }
 
-  class ArcGisMapServerImageryProvider extends ImageryProvider {
+  interface ArcGisMapServerImageryProviderOptions {
     url: string
-    usingPrecachedTiles: boolean
-    constructor(
-      options: {
-        url: string
-        tileDiscardPolicy?: TileDiscardPolicy
-        proxy?: Proxy
-        usePreCachedTilesIfAvailable?: boolean
-        enablePickFeatures?: boolean
-        rectangle?: Rectangle
-        tilingScheme?: TilingScheme
-        ellipsoid?: Ellipsoid
-        tileWidth?: number
-        tileHeight?: number
-        maximumLevel?: number
-      },
-      layers?: string,
-    )
+    token?: string
+    tileDiscardPolicy?: TileDiscardPolicy
+    proxy?: Proxy
+    usePreCachedTilesIfAvailable?: boolean
+    layers?: string
+    enablePickFeatures?: boolean
+    rectangle?: Rectangle
+    tilingScheme?: TilingScheme
+    ellipsoid?: Ellipsoid
+    tileWidth?: number
+    tileHeight?: number
+    maximumLevel?: number
+  }
+
+  class ArcGisMapServerImageryProvider extends ImageryProvider {
+    readonly url: string
+    readonly usingPrecachedTiles: boolean
+    constructor(options: ArcGisMapServerImageryProviderOptions)
   }
 
   class DistanceDisplayCondition extends Packable {
@@ -5025,13 +5032,137 @@ declare namespace Cesium {
     ): HeadingPitchRange
   }
 
-  // tslint:disable-next-line:no-unnecessary-class
+  interface Cesium3DTilesetOptions {
+    url: string
+    show?: boolean
+    modelMatrix?: Matrix4
+    shadows?: ShadowMode
+    maximumScreenSpaceError?: number
+    maximumMemoryUsage?: number
+    cullWithChildrenBounds?: boolean
+    cullRequestsWhileMoving?: boolean
+    cullRequestsWhileMovingMultiplier?: number
+    preloadWhenHidden?: boolean
+    preloadFlightDestinations?: boolean
+    preferLeaves?: boolean
+    dynamicScreenSpaceError?: boolean
+    dynamicScreenSpaceErrorDensity?: number
+    dynamicScreenSpaceErrorFactor?: number
+    dynamicScreenSpaceErrorHeightFalloff?: number
+    progressiveResolutionHeightFraction?: number
+    foveatedScreenSpaceError?: boolean
+    foveatedConeSize?: number
+    foveatedMinimumScreenSpaceErrorRelaxation?: number
+    foveatedInterpolationCallback?: (
+      p: number,
+      q: number,
+      time: number,
+    ) => number
+    foveatedTimeDelay?: number
+    skipLevelOfDetail?: boolean
+    baseScreenSpaceError?: number
+    skipScreenSpaceErrorFactor?: number
+    skipLevels?: number
+    immediatelyLoadDesiredLevelOfDetail?: boolean
+    loadSiblings?: boolean
+    clippingPlanes?: any
+    classificationType?: Property
+    ellipsoid?: Ellipsoid
+    pointCloudShading?: Object
+    imageBasedLightingFactor?: Cartesian2
+    lightColor?: Cartesian3
+    luminanceAtZenith?: number
+    sphericalHarmonicCoefficients?: any
+    specularEnvironmentMaps?: string
+    debugHeatmapTilePropertyName?: string
+    debugFreezeFrame?: boolean
+    debugColorizeTiles?: boolean
+    debugWireframe?: boolean
+    debugShowBoundingVolume?: boolean
+    debugShowContentBoundingVolume?: boolean
+    debugShowViewerRequestVolume?: boolean
+    debugShowGeometricError?: boolean
+    debugShowRenderingStatistics?: boolean
+    debugShowMemoryUsage?: boolean
+    debugShowUrl?: boolean
+  }
+
   class Cesium3DTileset {
-    constructor(Cesium3DTilesetItem: {
-      url: string
-      maximumScreenSpaceError: number
-      maximumNumberOfLoadedTiles: number
-    })
+    constructor(options: Cesium3DTilesetOptions)
+    allTilesLoaded: Event
+    readonly asset: object
+    readonly boundingSphere: BoundingSphere
+    readonly classificationType: any
+    clippingPlanes: any
+    colorBlendAmount: number
+    colorBlendMode: any
+    cullRequestsWhileMoving: boolean
+    cullRequestsWhileMovingMultiplier: number
+    debugColorizeTiles: boolean
+    debugFreezeFrame: boolean
+    debugShowBoundingVolume: boolean
+    debugShowContentBoundingVolume: boolean
+    debugShowGeometricError: boolean
+    debugShowMemoryUsage: boolean
+    debugShowRenderingStatistics: boolean
+    debugShowUrl: boolean
+    debugShowViewerRequestVolume: boolean
+    debugWireframe: boolean
+    dynamicScreenSpaceError: boolean
+    dynamicScreenSpaceErrorDensity: number
+    dynamicScreenSpaceErrorFactor: number
+    dynamicScreenSpaceErrorHeightFalloff: number
+    readonly ellipsoid: Ellipsoid
+    readonly extras: any
+    foveatedConeSize: number
+    foveatedInterpolationCallback: (
+      p: number,
+      q: number,
+      time: number,
+    ) => number
+    foveatedMinimumScreenSpaceErrorRelaxation: number
+    foveatedScreenSpaceError: boolean
+    foveatedTimeDelay: number
+    imageBasedLightingFactor: Cartesian2
+    immediatelyLoadDesiredLevelOfDetail: boolean
+    initialTilesLoaded: Event
+    lightColor: Cartesian3
+    loadProgress: Event
+    loadSiblings: boolean
+    luminanceAtZenith: number
+    maximumMemoryUsage: number
+    maximumScreenSpaceError: number
+    modelMatrix: Matrix4
+    pointCloudShading: any
+    preferLeaves: boolean
+    preloadFlightDestinations: boolean
+    preloadWhenHidden: boolean
+    progressiveResolutionHeightFraction: number
+    readonly properties: object
+    readonly ready: boolean
+    readonly readyPromise: any
+    readonly root: any
+    shadows: ShadowMode
+    show: boolean
+    skipLevelOfDetail: boolean
+    skipLevels: number
+    skipScreenSpaceErrorFactor: number
+    specularEnvironmentMaps: string
+    sphericalHarmonicCoefficients: any
+    style: any
+    tileFailed: Event
+    tileLoad: Event
+    readonly tilesLoaded: boolean
+    tileUnload: Event
+    tileVisible: Event
+    readonly timeSinceLoad: number
+    readonly totalMemoryUsageInBytes: number
+    readonly url: string
+    destroy(): void
+    hasExtension(extensionName: string): boolean
+    isDestroyed(): boolean
+    makeStyleDirty(): void
+    trimLoadedTiles(): void
   }
 
   class ImageryLayer {
@@ -5927,6 +6058,26 @@ declare namespace Cesium {
     destroy(): void
   }
 
+  interface WebMapServiceImageryProviderOptions {
+    url: string
+    layers: string
+    parameters?: any
+    getFeatureInfoParameters?: any
+    enablePickFeatures?: boolean
+    getFeatureInfoFormats?: GetFeatureInfoFormat[]
+    rectangle?: Rectangle
+    tilingScheme?: TilingScheme
+    ellipsoid?: Ellipsoid
+    tileWidth?: number
+    tileHeight?: number
+    minimumLevel?: number
+    maximumLevel?: number
+    crs?: string
+    srs?: string
+    credit?: Credit | string
+    subdomains?: string | string[]
+  }
+
   class WebMapServiceImageryProvider extends ImageryProvider {
     readonly url: string
     static DefaultParameters: {
@@ -5941,25 +6092,28 @@ declare namespace Cesium {
       version: string
       request: string
     }
-    constructor(options: {
-      url: string
-      layers: string
-      parameters?: any
-      getFeatureInfoParameters?: any
-      enablePickFeatures?: boolean
-      getFeatureInfoFormats?: GetFeatureInfoFormat[]
-      rectangle?: Rectangle
-      tilingScheme?: TilingScheme
-      ellipsoid?: Ellipsoid
-      tileWidth?: number
-      tileHeight?: number
-      minimumLevel?: number
-      maximumLevel?: number
-      crs?: string
-      srs?: string
-      credit?: Credit | string
-      subdomains?: string | string[]
-    })
+    constructor(options: WebMapServiceImageryProviderOptions)
+  }
+
+  interface WebMapTileServiceImageryProviderOptions {
+    url: string
+    format?: string
+    layer: string
+    style: string
+    tileMatrixSetID: string
+    tileMatrixLabels?: any[]
+    clock?: Clock
+    times?: TimeIntervalCollection
+    dimensions?: any
+    tileWidth?: number
+    tileHeight?: number
+    tilingScheme?: TilingScheme
+    rectangle?: Rectangle
+    minimumLevel?: number
+    maximumLevel?: number
+    ellipsoid?: Ellipsoid
+    credit?: Credit | string
+    subdomains?: string | string[]
   }
 
   class WebMapTileServiceImageryProvider extends ImageryProvider {
@@ -5968,26 +6122,7 @@ declare namespace Cesium {
     readonly format: string
     times: TimeIntervalCollection
     readonly url: string
-    constructor(options: {
-      url: string
-      format?: string
-      layer: string
-      style: string
-      tileMatrixSetID: string
-      tileMatrixLabels?: any[]
-      clock?: Clock
-      times?: TimeIntervalCollection
-      dimensions?: any
-      tileWidth?: number
-      tileHeight?: number
-      tilingScheme?: TilingScheme
-      rectangle?: Rectangle
-      minimumLevel?: number
-      maximumLevel?: number
-      ellipsoid?: Ellipsoid
-      credit?: Credit | string
-      subdomains?: string | string[]
-    })
+    constructor(options: WebMapTileServiceImageryProviderOptions)
   }
 
   class Animation {
