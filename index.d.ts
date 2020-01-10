@@ -5165,6 +5165,26 @@ declare namespace Cesium {
     trimLoadedTiles(): void
   }
 
+  interface ImageryLayerOptions {
+    rectangle?: Rectangle
+    alpha?: number | ((frameState: any, layer: any, x: any, y: any, level: any) => number)
+    brightness?: number | ((frameState: any, layer: any, x: any, y: any, level: any) => number)
+    contrast?: number | ((frameState: any, layer: any, x: any, y: any, level: any) => number)
+    hue?: number | ((frameState: any, layer: any, x: any, y: any, level: any) => number)
+    saturation?: number | ((frameState: any, layer: any, x: any, y: any, level: any) => number)
+    gamma?: number | ((frameState: any, layer: any, x: any, y: any, level: any) => number)
+    splitDirection?: any
+    minificationFilter?: any
+    magnificationFilter?: any
+    show?: boolean
+    maximumAnisotropy?: number
+    minimumTerrainLevel?: number
+    maximumTerrainLevel?: number
+    cutoutRectangle?: Rectangle
+    colorToAlpha?: Color
+    colorToAlphaThreshold?: Number
+  }
+
   class ImageryLayer {
     alpha: number
     brightness: number
@@ -5182,19 +5202,7 @@ declare namespace Cesium {
     static DEFAULT_GAMMA: number
     constructor(
       imageryProvider: ImageryProvider,
-      options?: {
-        rectangle?: Rectangle
-        alpha?: number | ImageryLayer.ValueFunc
-        brightness?: number | ImageryLayer.ValueFunc
-        contrast?: number | ImageryLayer.ValueFunc
-        hue?: number | ImageryLayer.ValueFunc
-        saturation?: number | ImageryLayer.ValueFunc
-        gamma?: number | ImageryLayer.ValueFunc
-        show?: boolean
-        maximumAnisotropy?: number
-        minimumTerrainLevel?: number
-        maximumTerrainLevel?: number
-      },
+      options?: ImageryLayerOptions,
     )
     isBaseLayer(): boolean
     isDestroyed(): boolean
